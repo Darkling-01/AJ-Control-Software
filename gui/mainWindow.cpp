@@ -359,5 +359,3 @@ void MainWindow::createMenus()
    examplesMenu->addAction(servoMotorAct);
    examplesMenu->addAction(ledSwitchAct);
 }
-
-

@@ -12,6 +12,7 @@
 #include "serial.h"
 #include "examples.h"
 #include <QUndoStack>
+#include <QLabel>
 
 
 class MainWindow : public QMainWindow
@@ -118,5 +119,19 @@ private slots:
    }
 
 };
+
+   explicit MainWindow(Qwidget *parent = nullptr);
+   ~MainWindow(); 
+
+private:
+
+   QPushButton *button;    // a button widget
+   QLabel *label;	   // a label widget
+
+   QAction *newAction      // Action for "new" item menu
+   QAction *exitAction     // Action for "exit" item menu   
+
+};
+
 
 #endif
