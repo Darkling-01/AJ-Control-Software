@@ -14,19 +14,29 @@ class MainWindow : public QMainWindow
    Q_OBJECT 
 
 public:
-
-   explicit MainWindow(Qwidget *parent = nullptr);
+   explicit MainWindow(QWidget *parent = nullptr);
    ~MainWindow(); 
 
 private:
-
    QPushButton *button;    // a button widget
    QLabel *label;	   // a label widget
 
-   QAction *newAction      // Action for "new" item menu
-   QAction *exitAction     // Action for "exit" item menu   
+   QAction *newAction;      // Action for "new" item menu
+   QAction *exitAction;     // Action for "exit" item menu   
+
+private slots:
+   void newFile();
+   void open();
+   void save();
+   // void print();
+   void undo();
+   void redo();
+
+protected:
+#ifndef QT_NO_CONTEXTMENU
+   void contextMenuEvent(QContextMenuEvent *event) override;
+#endif  // QT_NO_CONTEXTMENU
 
 };
-
 
 #endif
