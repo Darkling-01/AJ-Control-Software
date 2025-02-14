@@ -3,21 +3,20 @@
 #include "mainWindow.h"
 #include <QMenuBar>
 #include <QAction>
-#include <QToolBar>
-#include <QStatusBar>
 #include <QMainWindow>
-
+#include <QKeySequence>
+#include <QIcon>
 
 MainWindow::MainWindow(QWidget *parent)
    : QMainWindow(parent)
 {
-
    // Set window title and size
    setWindowTitle("AJ-Drone");
-   setGeometry(150, 100, 1080, 900);
+   setGeometry(150, 100, 1080, 900);   
+
+   createActions();
+   // createMenu();
 }
-
-
 
 MainWindow::~MainWindow()
 {
@@ -26,12 +25,15 @@ MainWindow::~MainWindow()
 
 }
 
-
+// Events are sent to widgets when action is associated
+#ifndef QT_NO_CONTEXTMENU
 void MainWindow::contextMenuEvent(QContextMenuEvent *event)
 {
-   // Code Here
+   
 
 }
+#endif  // QT_NO_CONTEXTMENU
+
 
 void MainWindow::newFile()
 {
@@ -56,6 +58,16 @@ void MainWindow::redo()
 void MainWindow::undo()
 {
    // Code Here
+}
+
+void MainWindow::createActions()
+{
+   // &New is used to displayed for the action, and '&' character is defining
+   // keyboard shortcut (Alt + N)
+   newAct = new QAction(QIcon::fromTheme("document-new"), tr("&New"), this);
+   newAct->setShortcuts(QKeySequence::New);
+   newAct->setStatusTip(tr("Create a new file."));
+   connect(newAct, &QAction::triggered, this, &MainWindow::newFile);
 }
 
 
