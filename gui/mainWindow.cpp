@@ -68,6 +68,33 @@ void MainWindow::createActions()
    newAct->setShortcuts(QKeySequence::New);
    newAct->setStatusTip(tr("Create a new file."));
    connect(newAct, &QAction::triggered, this, &MainWindow::newFile);
+
+   openAct = new QAction(QIcon::fromTheme("document-open"), tr("&Open"), this);
+   openAct->setShortcuts(QKeySequence::Open);
+   openAct->setStatusTip(tr("Open a new file."));
+   connect(openAct, &QAction::triggered, this, &MainWindow::open);
+
+   saveAct = new QAction(QIcon::fromTheme("document-save"), tr("&Save"), this); 
+   saveAct->setShortcuts(QKeySequence::Save);
+   saveAct->setStatusTip(tr("Save file."));
+   connect(saveAct, &QAction::triggered, this, &MainWindow::save);
+
+
+   //  
+
+   alignmentGroup = new QActionGroup(this);
+   alignmentGroup->addAction(leftAlignAct);
+   alignmentGroup->addAction(rightAlignAct);
+   alignmentGroup->addAction(centerAct);
+   alignmentGroup->addAction(justifyAct);
+   leftAlignAct->setChecked(true);
+}
+
+void MainWindow::createMenus()
+{
+   fileMenu = menuBar()->addMenu(tr("&File"));
+   fileMenu->addAction(newAct);
+
 }
 
 
