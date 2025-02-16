@@ -23,14 +23,14 @@ protected:
 #endif  // QT_NO_CONTEXTMENU
 
 private:
-   QPushButton *button;    // a button widget
-   QLabel *label;	   // a label widget
+  // QPushButton *button;    // a button widget
+  // QLabel *label;	   // a label widget
 
-   QAction *newAction;      // Action for "new" item menu
-   QAction *exitAction;     // Action for "exit" item menu   
+  // QAction *newAction;      // Action for "new" item menu
+  //  QAction *exitAction;     // Action for "exit" item menu   
 
    void createActions();
-   void createMenu();
+   void createMenus();
 
    QMenu *fileMenu;
    QMenu *editMenu;
@@ -43,6 +43,11 @@ private:
    QAction *saveAct;
    QAction *undoAct;
    QAction *redoAct;
+   QAction *leftAlignAct;
+   QAction *rightAlignAct;
+   QAction *justifyAct;
+   QAction *centerAct;
+
 
 private slots:
    void newFile();
@@ -51,7 +56,10 @@ private slots:
    // void print();
    void undo();
    void redo();
-
+   void leftAlign();
+   void rightAlign();
+   void center();
+   void justify();
 };
 
 #endif

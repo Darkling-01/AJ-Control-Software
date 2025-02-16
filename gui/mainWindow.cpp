@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
    setGeometry(150, 100, 1080, 900);   
 
    createActions();
-   // createMenu();
+   createMenus();
 }
 
 MainWindow::~MainWindow()
@@ -37,7 +37,7 @@ void MainWindow::contextMenuEvent(QContextMenuEvent *event)
 
 void MainWindow::newFile()
 {
-   // Code Here
+    
 }
 
 void MainWindow::open()
@@ -60,6 +60,27 @@ void MainWindow::undo()
    // Code Here
 }
 
+void MainWindow::leftAlign()
+{
+   // code here
+
+}
+
+void MainWindow::rightAlign()
+{
+
+}
+
+void MainWindow::center()
+{
+
+}
+
+void MainWindow::justify()
+{
+
+}
+
 void MainWindow::createActions()
 {
    // &New is used to displayed for the action, and '&' character is defining
@@ -79,8 +100,32 @@ void MainWindow::createActions()
    saveAct->setStatusTip(tr("Save file."));
    connect(saveAct, &QAction::triggered, this, &MainWindow::save);
 
+   redoAct = new QAction(QIcon::fromTheme("document-redo"), tr("&Redo") , this);
+   redoAct->setShortcuts(QKeySequence::Redo);
+   redoAct->setStatusTip(tr("Redo"));
+   connect(redoAct, &QAction::triggered, this, &MainWindow::redo);
 
-   //  
+   leftAlignAct = new QAction(tr("&Left Align"),this);
+   leftAlignAct->setCheckable(true);
+   leftAlignAct->setStatusTip("Left Align of text.");
+   connect(leftAlignAct, &QAction::triggered, this, &MainWindow::leftAlign);
+
+   rightAlignAct = new QAction(tr("&Right Align"), this);
+   rightAlignAct->setCheckable(true);
+   rightAlignAct->setStatusTip("Right Align of text.");
+   connect(rightAlignAct, &QAction::triggered, this, &MainWindow::rightAlign);
+
+   centerAct = new QAction(tr("&Center"), this);
+   centerAct->setCheckable(true);
+   centerAct->setStatusTip("Center the text.");
+   connect(centerAct, &QAction::triggered, this, &MainWindow::center);
+
+   justifyAct = new QAction(tr("&Justify"), this);
+   justifyAct->setCheckable(true);
+   justifyAct->setStatusTip("Justify the text");
+   connect(justifyAct, &QAction::triggered, this, &MainWindow::justify);
+
+   
 
    alignmentGroup = new QActionGroup(this);
    alignmentGroup->addAction(leftAlignAct);
@@ -94,7 +139,11 @@ void MainWindow::createMenus()
 {
    fileMenu = menuBar()->addMenu(tr("&File"));
    fileMenu->addAction(newAct);
+   fileMenu->addAction(openAct);
+   fileMenu->addAction(saveAct);
 
+   editMenu = menuBar()->addMenu(tr("&Edit"));
+   editMenu->addAction(redoAct);
 }
 
 
