@@ -6,13 +6,16 @@
 #include <QMainWindow>
 #include <QKeySequence>
 #include <QIcon>
+#include <QWidget>
+#include <QFileDialog>
+#include <QString>
 
 MainWindow::MainWindow(QWidget *parent)
    : QMainWindow(parent)
 {
    // Set window title and size
    setWindowTitle("AJ-Drone");
-   setGeometry(150, 100, 1080, 900);   
+   setGeometry(100, 100, 1030, 690);   
 
    createActions();
    createMenus();
@@ -48,6 +51,11 @@ void MainWindow::open()
 void MainWindow::save()
 {
    // Code Here
+}
+
+void MainWindow::saveAs()
+{
+
 }
 
 void MainWindow::redo()
@@ -100,10 +108,25 @@ void MainWindow::createActions()
    saveAct->setStatusTip(tr("Save file."));
    connect(saveAct, &QAction::triggered, this, &MainWindow::save);
 
+   saveAsAct = new QAction(QIcon::fromTheme("document-save-as"), tr("&SaveAs"), this);
+   saveAsAct->setShortcuts(QKeySequence::SaveAs);
+   saveAsAct->setStatusTip(tr("Saving file as"));
+   connect(saveAsAct, &QAction::triggered, this, &MainWindow::saveAs);
+
    redoAct = new QAction(QIcon::fromTheme("document-redo"), tr("&Redo") , this);
    redoAct->setShortcuts(QKeySequence::Redo);
    redoAct->setStatusTip(tr("Redo"));
    connect(redoAct, &QAction::triggered, this, &MainWindow::redo);
+
+   undoAct = new QAction(QIcon::fromTheme("document-undo"), tr("&Undo"), this);
+   undoAct->setShortcuts(QKeySequence::Undo);
+   undoAct->setStatusTip("Undo text.");
+   connect(undoAct, &QAction::triggered, this, &MainWindow::undo);
+   
+   quitAct = new QAction(QIcon::fromTheme("document-exit"), tr("&Exit"), this);
+   quitAct->setShortcuts(QKeySequence::Quit);
+   quitAct->setStatusTip("Exit");
+   connect(quitAct, &QAction::triggered, this, &QWidget::close);
 
    leftAlignAct = new QAction(tr("&Left Align"),this);
    leftAlignAct->setCheckable(true);
@@ -123,9 +146,7 @@ void MainWindow::createActions()
    justifyAct = new QAction(tr("&Justify"), this);
    justifyAct->setCheckable(true);
    justifyAct->setStatusTip("Justify the text");
-   connect(justifyAct, &QAction::triggered, this, &MainWindow::justify);
-
-   
+   connect(justifyAct, &QAction::triggered, this, &MainWindow::justify); 
 
    alignmentGroup = new QActionGroup(this);
    alignmentGroup->addAction(leftAlignAct);
@@ -141,9 +162,12 @@ void MainWindow::createMenus()
    fileMenu->addAction(newAct);
    fileMenu->addAction(openAct);
    fileMenu->addAction(saveAct);
+   fileMenu->addAction(saveAsAct);
+   fileMenu->addAction(quitAct);
 
    editMenu = menuBar()->addMenu(tr("&Edit"));
    editMenu->addAction(redoAct);
+   editMenu->addAction(undoAct);
 }
 
 

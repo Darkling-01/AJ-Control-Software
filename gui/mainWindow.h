@@ -41,8 +41,10 @@ private:
    QActionGroup *alignmentGroup;
    QAction *openAct;
    QAction *saveAct;
+   QAction *saveAsAct;
    QAction *undoAct;
    QAction *redoAct;
+   QAction *quitAct;
    QAction *leftAlignAct;
    QAction *rightAlignAct;
    QAction *justifyAct;
@@ -53,6 +55,7 @@ private slots:
    void newFile();
    void open();
    void save();
+   void saveAs();
    // void print();
    void undo();
    void redo();
