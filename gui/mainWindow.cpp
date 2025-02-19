@@ -8,7 +8,11 @@
 #include <QIcon>
 #include <QWidget>
 #include <QFileDialog>
+#include <QFile>
+#include <QTextEdit>   // allows basic editing and essential for a code editor.
+#include <QTextStream>
 #include <QString>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
    : QMainWindow(parent)
@@ -19,6 +23,13 @@ MainWindow::MainWindow(QWidget *parent)
 
    createActions();
    createMenus();
+
+   // create a new QTextEdit (text editor widget)
+   QTextEdit *editor = new QTextEdit(this);
+
+   // set the QTextEdit as central widget
+   setCentralWidget(editor);
+
 }
 
 MainWindow::~MainWindow()
@@ -40,7 +51,27 @@ void MainWindow::contextMenuEvent(QContextMenuEvent *event)
 
 void MainWindow::newFile()
 {
-    
+   // use getSaveFileName(), if file does not exit, then a file will be created
+   // opens the dialog and choose location
+   QString filename = QFileDialog::getSaveFileName(this, tr("Save File"), 
+			"home/desktop/untitled.cpp");
+     // Check if user selected a file.
+     if(!filename.isEmpty())
+     {
+	// Create and write to the file.
+	QFile file(filename);
+	if(file.open(QIODevice::WriteOnly | QIODevice::Text))
+	  {
+	    QTextStream stream(&file);
+	    stream << "Your code goes here.\n";
+	    file.close();
+ 	  }
+	// Handle error opening file
+	else
+	{
+	   QMessageBox::critical(nullptr, "Error", "Could not open file.");
+	}
+     }
 }
 
 void MainWindow::open()
@@ -55,7 +86,7 @@ void MainWindow::save()
 
 void MainWindow::saveAs()
 {
-
+   
 }
 
 void MainWindow::redo()
