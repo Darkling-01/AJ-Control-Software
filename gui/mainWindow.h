@@ -4,8 +4,10 @@
 #include <QMainWindow>
 #include <QBoxLayout>
 #include <QPushButton>
-#include <QLabel>
 #include <QAction>
+#include <QFile>
+#include <QTextEdit>
+#include <QTabWidget>
 
 
 class MainWindow : public QMainWindow
@@ -28,6 +30,10 @@ private:
 
   // QAction *newAction;      // Action for "new" item menu
   //  QAction *exitAction;     // Action for "exit" item menu   
+
+   QTabWidget *tabWidget;    // Declare QTabWidget as a variable memeber
+
+   QTextEdit *openFileInTab(QString file);
 
    void createActions();
    void createMenus();

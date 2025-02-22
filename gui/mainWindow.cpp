@@ -13,6 +13,10 @@
 #include <QTextStream>
 #include <QString>
 #include <QMessageBox>
+#include <QTabWidget>
+#include <QLabel>
+
+#include <QFileInfo>
 
 MainWindow::MainWindow(QWidget *parent)
    : QMainWindow(parent)
@@ -24,11 +28,10 @@ MainWindow::MainWindow(QWidget *parent)
    createActions();
    createMenus();
 
-   // create a new QTextEdit (text editor widget)
-   QTextEdit *editor = new QTextEdit(this);
-
-   // set the QTextEdit as central widget
-   setCentralWidget(editor);
+   // Create and initialize tabWidget
+   tabWidget = new QTabWidget(this);
+   // set the QTabWidget as central widget
+   setCentralWidget(tabWidget);
 
 }
 
@@ -63,15 +66,41 @@ void MainWindow::newFile()
 	if(file.open(QIODevice::WriteOnly | QIODevice::Text))
 	  {
 	    QTextStream stream(&file);
-	    stream << "Your code goes here.\n";
-	    file.close();
+	    stream << "// Your code goes here.\n";
+            file.close();
+
+            openFileInTab(filename);
  	  }
 	// Handle error opening file
 	else
-	{
+	 {
 	   QMessageBox::critical(nullptr, "Error", "Could not open file.");
-	}
+	 }
+   
      }
+}
+
+// Tab is display when new or opening file.
+QTextEdit* MainWindow::openFileInTab(QString file)
+{
+   // QTextEdit widget to display the file's content
+   QTextEdit *textEdit = new QTextEdit(this);
+
+   QFile fileObj(file);
+   if(fileObj.open(QIODevice::ReadOnly | QIODevice::Text))
+     {
+	// in() used to read data from the stream
+	QTextStream in(&fileObj);
+	QString fileContent = in.readAll();
+	fileObj.close();
+
+	textEdit->setPlainText(fileContent);
+     } 
+
+   // Create a new tab and set the QTextEdit as its widget
+   tabWidget->addTab(textEdit, file);
+   // returns the QTextEdit pointer
+   return textEdit;
 }
 
 void MainWindow::open()
@@ -81,7 +110,13 @@ void MainWindow::open()
 
 void MainWindow::save()
 {
-   // Code Here
+   QString filename = QFileDialog::getSaveFileName
+	(
+	  nullptr,
+	  "Save File",
+	  "",
+	  "Text Files(*.txt);;All Files (*)"
+	);
 }
 
 void MainWindow::saveAs()
