@@ -16,7 +16,6 @@
 #include <QTabWidget>
 #include <QLabel>
 
-#include <QFileInfo>
 
 MainWindow::MainWindow(QWidget *parent)
    : QMainWindow(parent)
@@ -27,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
 
    createActions();
    createMenus();
-
+   
    // Create and initialize tabWidget
    tabWidget = new QTabWidget(this);
    // set the QTabWidget as central widget
@@ -69,7 +68,12 @@ void MainWindow::newFile()
 	    stream << "// Your code goes here.\n";
             file.close();
 
-            openFileInTab(filename);
+	    // Mark the file as saved and store the filename
+	    currentFile = filename;
+	    isFileSaved = true;
+	
+	    // Open the file in the editor  
+          openFileInTab(filename);
  	  }
 	// Handle error opening file
 	else
@@ -84,7 +88,7 @@ void MainWindow::newFile()
 QTextEdit* MainWindow::openFileInTab(QString file)
 {
    // QTextEdit widget to display the file's content
-   QTextEdit *textEdit = new QTextEdit(this);
+   textEdit = new QTextEdit(this);
 
    QFile fileObj(file);
    if(fileObj.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -110,13 +114,39 @@ void MainWindow::open()
 
 void MainWindow::save()
 {
-   QString filename = QFileDialog::getSaveFileName
-	(
-	  nullptr,
-	  "Save File",
-	  "",
-	  "Text Files(*.txt);;All Files (*)"
-	);
+   QTextEdit *textEdit = new QTextEdit(this);
+   
+   // If it's a new unsaved file, prompt user for a save location
+   if(!isFileSaved)
+     {
+   	QString filename = QFileDialog::getSaveFileName(
+		this, tr("Save File"), currentFile);
+	// If the user chooses a valid filename, save the content
+	if(!filename.isEmpty())
+	  {
+	     currentFile = filename;    // Store the new filename
+	     isFileSaved = true;	// Mark the file saved
+
+	     QFile file(currentFile);
+	     if(file.open(QIODevice::WriteOnly | QIODevice::Text))
+	       {
+	          QTextStream out(&file);
+		  out << textEdit->toPlainText();   // Save the content of the editor
+		  file.close();
+	       }
+	  }
+    }
+
+   else{
+   // now save the content to the file{
+   QFile file(currentFile);
+   if(file.open(QIODevice::WriteOnly | QIODevice::Text))
+     {
+        QTextStream out(&file);
+        out << textEdit->toPlainText();
+        file.close();
+     }
+  }
 }
 
 void MainWindow::saveAs()

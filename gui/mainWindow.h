@@ -30,11 +30,14 @@ private:
 
   // QAction *newAction;      // Action for "new" item menu
   //  QAction *exitAction;     // Action for "exit" item menu   
-
+ 
+   QString currentFile;      // Stores the file name or path of the saved file
+   bool isFileSaved;	     // Tracks if the file has been saved before
+   
    QTabWidget *tabWidget;    // Declare QTabWidget as a variable memeber
-
+   QTextEdit *textEdit;
    QTextEdit *openFileInTab(QString file);
-
+   
    void createActions();
    void createMenus();
 
