@@ -37,7 +37,7 @@ private:
    QTabWidget *tabWidget;    // Declare QTabWidget as a variable memeber
    QTextEdit *textEdit;
    QTextEdit *openFileInTab(QString file);
-   
+   QTextEdit *getActiveTextEdit();   
    void createActions();
    void createMenus();
 

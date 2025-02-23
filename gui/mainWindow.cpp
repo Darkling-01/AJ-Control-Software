@@ -56,7 +56,7 @@ void MainWindow::newFile()
    // use getSaveFileName(), if file does not exit, then a file will be created
    // opens the dialog and choose location
    QString filename = QFileDialog::getSaveFileName(this, tr("Save File"), 
-			"home/desktop/untitled.cpp");
+			"~/Desktop/untitled.cpp");
      // Check if user selected a file.
      if(!filename.isEmpty())
      {
@@ -73,7 +73,7 @@ void MainWindow::newFile()
 	    isFileSaved = true;
 	
 	    // Open the file in the editor  
-          openFileInTab(filename);
+            openFileInTab(filename);
  	  }
 	// Handle error opening file
 	else
@@ -83,6 +83,17 @@ void MainWindow::newFile()
    
      }
 }
+
+QTextEdit* MainWindow::getActiveTextEdit()
+{
+   // Assuming tabWidget is the QTabWidget containing QTextEdit tabs
+   QWidget *currentWidget = tabWidget->currentWidget();
+   if (currentWidget) {
+       return qobject_cast<QTextEdit*>(currentWidget);
+   }
+   return nullptr;  // Return nullptr if no valid QTextEdit found
+}
+
 
 // Tab is display when new or opening file.
 QTextEdit* MainWindow::openFileInTab(QString file)
@@ -114,7 +125,7 @@ void MainWindow::open()
 
 void MainWindow::save()
 {
-   QTextEdit *textEdit = new QTextEdit(this);
+   QTextEdit *textEdit = getActiveTextEdit();
    
    // If it's a new unsaved file, prompt user for a save location
    if(!isFileSaved)
@@ -137,16 +148,17 @@ void MainWindow::save()
 	  }
     }
 
-   else{
-   // now save the content to the file{
-   QFile file(currentFile);
-   if(file.open(QIODevice::WriteOnly | QIODevice::Text))
-     {
-        QTextStream out(&file);
-        out << textEdit->toPlainText();
-        file.close();
-     }
-  }
+   else
+   {
+      // now save the content to the file{
+      QFile file(currentFile);
+      if(file.open(QIODevice::WriteOnly | QIODevice::Text))
+      {
+         QTextStream out(&file);
+         out << textEdit->toPlainText();
+         file.close();
+      }
+   }
 }
 
 void MainWindow::saveAs()
