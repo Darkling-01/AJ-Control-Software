@@ -120,12 +120,29 @@ QTextEdit* MainWindow::openFileInTab(QString file)
 
 void MainWindow::open()
 {
-   // Code Here
+   QString filename = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::homePath(),
+			tr("*.cpp *.c"));
+
+   // Create an instance
+   QFile file(filename);
+   
+   if(file.open(QIODevice::ReadWrite | QIODevice::Text | QIODevice::Append))
+     {
+	QTextStream in(&file);
+	QString fileContent = in.readAll();
+
+	openFileInTab(fileContent);
+
+	file.seek(file.size());   // Ensures that we're in the end of file before appending 
+	QTextStream out(&file);   // After reading, append the content with out
+	file.close();
+     }
 }
 
 void MainWindow::save()
 {
-   QTextEdit *textEdit = getActiveTextEdit();
+   // Get the active QTextEdit (the one the user is editing)
+   QTextEdit *textEdit = getActiveTextEdit();  // You need a way to access the active QTextEdit
    
    // If it's a new unsaved file, prompt user for a save location
    if(!isFileSaved)
@@ -150,12 +167,12 @@ void MainWindow::save()
 
    else
    {
-      // now save the content to the file{
+      // If the file is already save, just save it directly
       QFile file(currentFile);
       if(file.open(QIODevice::WriteOnly | QIODevice::Text))
       {
          QTextStream out(&file);
-         out << textEdit->toPlainText();
+         out << textEdit->toPlainText();    // Save the content to the editor
          file.close();
       }
    }
