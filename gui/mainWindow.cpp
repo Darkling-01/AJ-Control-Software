@@ -96,12 +96,12 @@ QTextEdit* MainWindow::getActiveTextEdit()
 
 
 // Tab is display when new or opening file.
-QTextEdit* MainWindow::openFileInTab(QString file)
+QTextEdit* MainWindow::openFileInTab(const QString filePath)
 {
    // QTextEdit widget to display the file's content
    textEdit = new QTextEdit(this);
 
-   QFile fileObj(file);
+   QFile fileObj(filePath);
    if(fileObj.open(QIODevice::ReadOnly | QIODevice::Text))
      {
 	// in() used to read data from the stream
@@ -113,28 +113,30 @@ QTextEdit* MainWindow::openFileInTab(QString file)
      } 
 
    // Create a new tab and set the QTextEdit as its widget
-   tabWidget->addTab(textEdit, file);
+   tabWidget->addTab(textEdit, QFileInfo(filePath).fileName());
    // returns the QTextEdit pointer
    return textEdit;
 }
 
 void MainWindow::open()
 {
-   QString filename = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::homePath(),
+   QString filename = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::currentPath(),
 			tr("*.cpp *.c"));
 
-   // Create an instance
+   // Create QFileInfo and QFIle instance
    QFile file(filename);
-   
-   if(file.open(QIODevice::ReadWrite | QIODevice::Text | QIODevice::Append))
+   if(file.open(QIODevice::ReadOnly | QIODevice::Text))
      {
 	QTextStream in(&file);
 	QString fileContent = in.readAll();
 
-	openFileInTab(fileContent);
-
-	file.seek(file.size());   // Ensures that we're in the end of file before appending 
-	QTextStream out(&file);   // After reading, append the content with out
+	openFileInTab(file.fileName());
+ 
+	file.seek(file.size());   // Move to the end of the file
+        
+        // Now, append new content to the file
+        QTextStream out(&file);
+        // out << "\nNew content appended.";  // Example of what you want to append
 	file.close();
      }
 }
