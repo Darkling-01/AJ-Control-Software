@@ -1,6 +1,7 @@
 // mainWindow.cpp will handle the creation and layout of UI components
 
 #include "mainWindow.h"
+#include "examples.h"
 #include <QMenuBar>
 #include <QAction>
 #include <QMainWindow>
@@ -15,7 +16,7 @@
 #include <QMessageBox>
 #include <QTabWidget>
 #include <QLabel>
-
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent)
    : QMainWindow(parent)
@@ -122,8 +123,15 @@ void MainWindow::open()
 {
    QString filename = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::currentPath(),
 			tr("*.cpp *.c"));
+   // Check is filename is empty (or canceled by user)
+   if(filename.isEmpty())
+     {
+	return;	   // Do nothing if no file is selected
+     }
 
-   // Create QFileInfo and QFIle instance
+    currentFile = filename;	// Save the file path for later 
+
+   // Create QFile instance
    QFile file(filename);
    if(file.open(QIODevice::ReadOnly | QIODevice::Text))
      {
@@ -139,12 +147,14 @@ void MainWindow::open()
         // out << "\nNew content appended.";  // Example of what you want to append
 	file.close();
      }
+
 }
 
 void MainWindow::save()
 {
    // Get the active QTextEdit (the one the user is editing)
    QTextEdit *textEdit = getActiveTextEdit();  // You need a way to access the active QTextEdit
+
    
    // If it's a new unsaved file, prompt user for a save location
    if(!isFileSaved)
@@ -177,6 +187,9 @@ void MainWindow::save()
          out << textEdit->toPlainText();    // Save the content to the editor
          file.close();
       }
+	else {
+            qDebug() << "Failed to open file for saving! Check permissions or file path.";
+        }
    }
 }
 
@@ -220,6 +233,8 @@ void MainWindow::createActions()
 {
    // &New is used to displayed for the action, and '&' character is defining
    // keyboard shortcut (Alt + N)
+
+   // File menu
    newAct = new QAction(QIcon::fromTheme("document-new"), tr("&New"), this);
    newAct->setShortcuts(QKeySequence::New);
    newAct->setStatusTip(tr("Create a new file."));
@@ -240,6 +255,7 @@ void MainWindow::createActions()
    saveAsAct->setStatusTip(tr("Saving file as"));
    connect(saveAsAct, &QAction::triggered, this, &MainWindow::saveAs);
 
+   // Edit menu
    redoAct = new QAction(QIcon::fromTheme("document-redo"), tr("&Redo") , this);
    redoAct->setShortcuts(QKeySequence::Redo);
    redoAct->setStatusTip(tr("Redo"));
@@ -281,6 +297,12 @@ void MainWindow::createActions()
    alignmentGroup->addAction(centerAct);
    alignmentGroup->addAction(justifyAct);
    leftAlignAct->setChecked(true);
+
+   // Example menu
+   flyAct = new QAction(tr("fly"), this);
+   flyAct->setStatusTip("Fly Example");
+   connect(flyAct, &QAction::triggered, this, &MainWindow::onTriggeredFly);
+
 }
 
 void MainWindow::createMenus()
@@ -295,6 +317,9 @@ void MainWindow::createMenus()
    editMenu = menuBar()->addMenu(tr("&Edit"));
    editMenu->addAction(redoAct);
    editMenu->addAction(undoAct);
+
+   examplesMenu = menuBar()->addMenu("Examples");
+   examplesMenu->addAction(flyAct);
 }
 
 

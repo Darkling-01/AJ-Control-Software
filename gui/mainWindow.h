@@ -8,7 +8,8 @@
 #include <QFile>
 #include <QTextEdit>
 #include <QTabWidget>
-
+#include <QString>
+#include "examples.h"
 
 class MainWindow : public QMainWindow
 {
@@ -40,12 +41,12 @@ private:
    QTextEdit *getActiveTextEdit();   
    void createActions();
    void createMenus();
-
+   
    QMenu *fileMenu;
    QMenu *editMenu;
    QMenu *serialMenu;
-   QMenu *exmaples;
-   QMenu *settings;
+   QMenu *examplesMenu;
+   QMenu *settingsMenu;
    QAction *newAct;
    QActionGroup *alignmentGroup;
    QAction *openAct;
@@ -58,6 +59,7 @@ private:
    QAction *rightAlignAct;
    QAction *justifyAct;
    QAction *centerAct;
+   QAction *flyAct;
 
 
 private slots:
@@ -72,6 +74,12 @@ private slots:
    void rightAlign();
    void center();
    void justify();
+
+   void onTriggeredFly()
+   {
+	Examples example;
+	example.fly();
+   }
 };
 
 #endif
