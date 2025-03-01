@@ -2,6 +2,7 @@
 
 #include "mainWindow.h"
 #include "examples.h"
+#include <QApplication>
 #include <QMenuBar>
 #include <QAction>
 #include <QMainWindow>
@@ -24,6 +25,12 @@ MainWindow::MainWindow(QWidget *parent)
    // Set window title and size
    setWindowTitle("AJ-Drone");
    setGeometry(100, 100, 1030, 690);   
+
+   QFile file(":/qss/default.qss");
+   file.open(QFile::ReadOnly);
+   QString stylesheet = QLatin1String(file.readAll());
+
+   qApp->setStyleSheet(stylesheet);
 
    createActions();
    createMenus();
