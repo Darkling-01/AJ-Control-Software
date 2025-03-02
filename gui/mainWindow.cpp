@@ -2,6 +2,7 @@
 
 #include "mainWindow.h"
 #include "examples.h"
+
 #include <QApplication>
 #include <QMenuBar>
 #include <QAction>
@@ -18,20 +19,23 @@
 #include <QTabWidget>
 #include <QLabel>
 #include <QDebug>
+#include <QHBoxLayout>
+#include <QLabel>
 
 MainWindow::MainWindow(QWidget *parent)
    : QMainWindow(parent)
 {
    // Set window title and size
    setWindowTitle("AJ-Drone");
-   setGeometry(100, 100, 1030, 690);   
+   setGeometry(100, 100, 1030, 690); 
 
+   // Calling the file to add style (color)
    QFile file(":/qss/default.qss");
    file.open(QFile::ReadOnly);
    QString stylesheet = QLatin1String(file.readAll());
 
    qApp->setStyleSheet(stylesheet);
-
+   undoStack = new QUndoStack(this);
    createActions();
    createMenus();
    
@@ -39,7 +43,7 @@ MainWindow::MainWindow(QWidget *parent)
    tabWidget = new QTabWidget(this);
    // set the QTabWidget as central widget
    setCentralWidget(tabWidget);
-
+   
 }
 
 MainWindow::~MainWindow()
@@ -202,17 +206,7 @@ void MainWindow::save()
 
 void MainWindow::saveAs()
 {
-   
-}
-
-void MainWindow::redo()
-{
-   // Code Here
-}
-
-void MainWindow::undo()
-{
-   // Code Here
+   // Code here
 }
 
 void MainWindow::leftAlign()
@@ -223,17 +217,17 @@ void MainWindow::leftAlign()
 
 void MainWindow::rightAlign()
 {
-
+   // Code here
 }
 
 void MainWindow::center()
 {
-
+   // Code here
 }
 
 void MainWindow::justify()
 {
-
+   // Code here
 }
 
 void MainWindow::createActions()
@@ -266,12 +260,12 @@ void MainWindow::createActions()
    redoAct = new QAction(QIcon::fromTheme("document-redo"), tr("&Redo") , this);
    redoAct->setShortcuts(QKeySequence::Redo);
    redoAct->setStatusTip(tr("Redo"));
-   connect(redoAct, &QAction::triggered, this, &MainWindow::redo);
+   connect(redoAct, &QAction::triggered, undoStack, &QUndoStack::redo);
 
    undoAct = new QAction(QIcon::fromTheme("document-undo"), tr("&Undo"), this);
    undoAct->setShortcuts(QKeySequence::Undo);
    undoAct->setStatusTip("Undo text.");
-   connect(undoAct, &QAction::triggered, this, &MainWindow::undo);
+   connect(undoAct, &QAction::triggered, undoStack, &QUndoStack::undo);
    
    quitAct = new QAction(QIcon::fromTheme("document-exit"), tr("&Exit"), this);
    quitAct->setShortcuts(QKeySequence::Quit);
@@ -306,10 +300,16 @@ void MainWindow::createActions()
    leftAlignAct->setChecked(true);
 
    // Example menu
-   flyAct = new QAction(tr("fly"), this);
+   flyAct = new QAction(tr("Fly"), this);
    flyAct->setStatusTip("Fly Example");
    connect(flyAct, &QAction::triggered, this, &MainWindow::onTriggeredFly);
 
+   // Serial menu
+   findDeviceAct = new QAction(tr("Find Device"), this);
+   connect(findDeviceAct, &QAction::triggered, this, &MainWindow::findDevice);
+
+   serialPortAct = new QAction(tr("Serial Port"), this);
+   connect(serialPortAct, &QAction::triggered, this, &MainWindow::serialPort);
 }
 
 void MainWindow::createMenus()
@@ -325,7 +325,11 @@ void MainWindow::createMenus()
    editMenu->addAction(redoAct);
    editMenu->addAction(undoAct);
 
-   examplesMenu = menuBar()->addMenu("Examples");
+   serialMenu = menuBar()->addMenu(tr("&Serial"));
+   serialMenu->addAction(findDeviceAct);
+   serialMenu->addAction(serialPortAct);
+
+   examplesMenu = menuBar()->addMenu("&Examples");
    examplesMenu->addAction(flyAct);
 }
 

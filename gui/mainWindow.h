@@ -9,7 +9,10 @@
 #include <QTextEdit>
 #include <QTabWidget>
 #include <QString>
+#include "serial.h"
 #include "examples.h"
+#include <QUndoStack>
+
 
 class MainWindow : public QMainWindow
 {
@@ -23,6 +26,7 @@ public:
 protected:
 #ifndef QT_NO_CONTEXTMENU
    void contextMenuEvent(QContextMenuEvent *event) override;
+
 #endif  // QT_NO_CONTEXTMENU
 
 private:
@@ -39,6 +43,8 @@ private:
    QTextEdit *textEdit;
    QTextEdit *openFileInTab(QString file);
    QTextEdit *getActiveTextEdit();   
+   QUndoStack *undoStack;
+
    void createActions();
    void createMenus();
    
@@ -55,6 +61,8 @@ private:
    QAction *undoAct;
    QAction *redoAct;
    QAction *quitAct;
+   QAction *findDeviceAct;
+   QAction *serialPortAct;
    QAction *leftAlignAct;
    QAction *rightAlignAct;
    QAction *justifyAct;
@@ -68,8 +76,6 @@ private slots:
    void save();
    void saveAs();
    // void print();
-   void undo();
-   void redo();
    void leftAlign();
    void rightAlign();
    void center();
@@ -80,6 +86,19 @@ private slots:
 	Examples example;
 	example.fly();
    }
+   
+   void findDevice()
+   {
+	Serial serial;
+	serial.findDevice();
+   }
+   
+   void serialPort()
+   {
+	Serial serial;
+	serial.serialPort();
+   }
+
 };
 
 #endif
