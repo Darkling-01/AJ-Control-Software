@@ -67,7 +67,7 @@ private:
    QAction *rightAlignAct;
    QAction *justifyAct;
    QAction *centerAct;
-   QAction *flyAct;
+   QAction *led_blink;
 
 
 private slots:
@@ -81,10 +81,10 @@ private slots:
    void center();
    void justify();
 
-   void onTriggeredFly()
+   void onTriggeredBlink()
    {
 	Examples example;
-	example.fly();
+	example.led_Blink();
    }
    
    void findDevice()

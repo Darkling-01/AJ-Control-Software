@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
    : QMainWindow(parent)
 {
    // Set window title and size
-   setWindowTitle("AJ-Drone");
+   setWindowTitle("AJ Control Software");
    setGeometry(100, 100, 1030, 690); 
 
    // Calling the file to add style (color)
@@ -300,9 +300,9 @@ void MainWindow::createActions()
    leftAlignAct->setChecked(true);
 
    // Example menu
-   flyAct = new QAction(tr("Fly"), this);
-   flyAct->setStatusTip("Fly Example");
-   connect(flyAct, &QAction::triggered, this, &MainWindow::onTriggeredFly);
+   led_blink = new QAction(tr("Blink"), this);
+   led_blink->setStatusTip("Blink");
+   connect(led_blink, &QAction::triggered, this, &MainWindow::onTriggeredBlink);
 
    // Serial menu
    findDeviceAct = new QAction(tr("Find Device"), this);
@@ -330,7 +330,7 @@ void MainWindow::createMenus()
    serialMenu->addAction(serialPortAct);
 
    examplesMenu = menuBar()->addMenu("&Examples");
-   examplesMenu->addAction(flyAct);
+   examplesMenu->addAction(led_blink);
 }
 
 
