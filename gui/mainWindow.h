@@ -67,7 +67,11 @@ private:
    QAction *rightAlignAct;
    QAction *justifyAct;
    QAction *centerAct;
-   QAction *led_blink;
+   
+   // Examples
+   QAction *ledBlinkAct;
+   QAction *servoMotorAct;
+   QAction *ledSwitchAct;
 
 
 private slots:
@@ -81,12 +85,26 @@ private slots:
    void center();
    void justify();
 
-   void onTriggeredBlink()
+   // Examples
+   void onBlink()
    {
 	Examples example;
 	example.led_Blink();
    }
+
+   void servoMotor()
+   {
+        Examples example;
+        example.servo_motor();
+   }
+
+   void ledSwitch()
+   {
+        Examples example;
+        example.led_switch();
+   }
    
+   // Communication
    void findDevice()
    {
 	Serial serial;
