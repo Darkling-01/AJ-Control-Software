@@ -12,7 +12,10 @@
 #include "serial.h"
 #include "examples.h"
 #include <QUndoStack>
+<<<<<<< HEAD
 #include <QLabel>
+=======
+>>>>>>> ed2465d (added more examples)
 
 
 class MainWindow : public QMainWindow
@@ -126,25 +129,99 @@ private slots:
 >>>>>>> c024ff4 (created a .pro file and implemented menu structure)
    ~MainWindow(); 
 
-private:
-   QPushButton *button;    // a button widget
-   QLabel *label;	   // a label widget
+protected:
+#ifndef QT_NO_CONTEXTMENU
+   void contextMenuEvent(QContextMenuEvent *event) override;
 
-   QAction *newAction;      // Action for "new" item menu
-   QAction *exitAction;     // Action for "exit" item menu   
+#endif  // QT_NO_CONTEXTMENU
+
+private:
+  // QPushButton *button;    // a button widget
+  // QLabel *label;	   // a label widget
+
+  // QAction *newAction;      // Action for "new" item menu
+  //  QAction *exitAction;     // Action for "exit" item menu   
+ 
+   QString currentFile;      // Stores the file name or path of the saved file
+   bool isFileSaved;	     // Tracks if the file has been saved before
+   
+   QTabWidget *tabWidget;    // Declare QTabWidget as a variable memeber
+   QTextEdit *textEdit;
+   QTextEdit *openFileInTab(QString file);
+   QTextEdit *getActiveTextEdit();   
+   QUndoStack *undoStack;
+
+   void createActions();
+   void createMenus();
+   
+   QMenu *fileMenu;
+   QMenu *editMenu;
+   QMenu *serialMenu;
+   QMenu *examplesMenu;
+   QMenu *settingsMenu;
+   QAction *newAct;
+   QActionGroup *alignmentGroup;
+   QAction *openAct;
+   QAction *saveAct;
+   QAction *saveAsAct;
+   QAction *undoAct;
+   QAction *redoAct;
+   QAction *quitAct;
+   QAction *findDeviceAct;
+   QAction *serialPortAct;
+   QAction *leftAlignAct;
+   QAction *rightAlignAct;
+   QAction *justifyAct;
+   QAction *centerAct;
+   
+   // Examples
+   QAction *ledBlinkAct;
+   QAction *servoMotorAct;
+   QAction *ledSwitchAct;
+
 
 private slots:
    void newFile();
    void open();
    void save();
+   void saveAs();
    // void print();
-   void undo();
-   void redo();
+   void leftAlign();
+   void rightAlign();
+   void center();
+   void justify();
 
-protected:
-#ifndef QT_NO_CONTEXTMENU
-   void contextMenuEvent(QContextMenuEvent *event) override;
-#endif  // QT_NO_CONTEXTMENU
+   // Examples
+   void onBlink()
+   {
+	Examples example;
+	example.led_Blink();
+   }
+
+   void servoMotor()
+   {
+        Examples example;
+        example.servo_motor();
+   }
+
+   void ledSwitch()
+   {
+        Examples example;
+        example.led_switch();
+   }
+   
+   // Communication
+   void findDevice()
+   {
+	Serial serial;
+	serial.findDevice();
+   }
+   
+   void serialPort()
+   {
+	Serial serial;
+	serial.serialPort();
+   }
 
 };
 
