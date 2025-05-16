@@ -209,6 +209,23 @@ void MainWindow::saveAs()
    // Code here
 }
 
+// Examples Tab
+
+void onBlinkTriggered()
+{
+   // Code here
+}
+
+void servoMotorTriggered()
+{
+   // Code here
+}
+
+void ledSwitchTriggered()
+{
+   // Code here
+}
+
 void MainWindow::leftAlign()
 {
    // code here
@@ -300,9 +317,17 @@ void MainWindow::createActions()
    leftAlignAct->setChecked(true);
 
    // Example menu
-   led_blink = new QAction(tr("Blink"), this);
-   led_blink->setStatusTip("Blink");
-   connect(led_blink, &QAction::triggered, this, &MainWindow::onTriggeredBlink);
+   ledBlinkAct = new QAction(tr("Blink"), this);
+   ledBlinkAct->setStatusTip("Blink");
+   connect(ledBlinkAct, &QAction::triggered, this, &MainWindow::onBlink);
+
+   servoMotorAct = new QAction(tr("Servo Motor"), this);
+   servoMotorAct->setStatusTip("Servo Motor");
+   connect(servoMotorAct, &QAction::triggered, this, &MainWindow::servoMotor);
+
+   ledSwitchAct = new QAction(tr("Led Switch"), this);
+   ledSwitchAct->setStatusTip("Led Switch");
+   connect(ledSwitchAct, &QAction::triggered, this, &MainWindow::ledSwitch);
 
    // Serial menu
    findDeviceAct = new QAction(tr("Find Device"), this);
@@ -330,7 +355,9 @@ void MainWindow::createMenus()
    serialMenu->addAction(serialPortAct);
 
    examplesMenu = menuBar()->addMenu("&Examples");
-   examplesMenu->addAction(led_blink);
+   examplesMenu->addAction(ledBlinkAct);
+   examplesMenu->addAction(servoMotorAct);
+   examplesMenu->addAction(ledSwitchAct);
 }
 
 
