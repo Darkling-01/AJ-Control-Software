@@ -17,7 +17,7 @@ CXX           = g++
 DEFINES       = -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -O2 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I. -Igui -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++
+INCPATH       = -I. -Igui -Isrc/examples -Isrc/networking -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++
 QMAKE         = /usr/lib/qt5/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -53,9 +53,15 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = src/main.cpp \
-		gui/mainWindow.cpp moc_mainWindow.cpp
+		gui/mainWindow.cpp \
+		src/examples/examples.cpp \
+		src/networking/serial.cpp qrc_stylesheet.cpp \
+		moc_mainWindow.cpp
 OBJECTS       = main.o \
 		mainWindow.o \
+		examples.o \
+		serial.o \
+		qrc_stylesheet.o \
 		moc_mainWindow.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -143,8 +149,12 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		my_qt_project.pro gui/mainWindow.h src/main.cpp \
-		gui/mainWindow.cpp
+		my_qt_project.pro gui/mainWindow.h \
+		src/examples/examples.h \
+		src/networking/serial.h src/main.cpp \
+		gui/mainWindow.cpp \
+		src/examples/examples.cpp \
+		src/networking/serial.cpp
 QMAKE_TARGET  = my_qt_project
 DESTDIR       = 
 TARGET        = my_qt_project
@@ -242,7 +252,8 @@ Makefile: my_qt_project.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmak
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		my_qt_project.pro
+		my_qt_project.pro \
+		gui/stylesheet.qrc
 	$(QMAKE) -o Makefile my_qt_project.pro
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf:
@@ -331,6 +342,7 @@ Makefile: my_qt_project.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmak
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf:
 my_qt_project.pro:
+gui/stylesheet.qrc:
 qmake: FORCE
 	@$(QMAKE) -o Makefile my_qt_project.pro
 
@@ -345,9 +357,10 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
+	$(COPY_FILE) --parents gui/stylesheet.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents gui/mainWindow.h $(DISTDIR)/
-	$(COPY_FILE) --parents src/main.cpp gui/mainWindow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents gui/mainWindow.h src/examples/examples.h src/networking/serial.h $(DISTDIR)/
+	$(COPY_FILE) --parents src/main.cpp gui/mainWindow.cpp src/examples/examples.cpp src/networking/serial.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -371,8 +384,14 @@ check: first
 
 benchmark: first
 
-compiler_rcc_make_all:
+compiler_rcc_make_all: qrc_stylesheet.cpp
 compiler_rcc_clean:
+	-$(DEL_FILE) qrc_stylesheet.cpp
+qrc_stylesheet.cpp: gui/stylesheet.qrc \
+		/usr/lib/qt5/bin/rcc \
+		gui/qss/default.qss
+	/usr/lib/qt5/bin/rcc -name stylesheet gui/stylesheet.qrc -o qrc_stylesheet.cpp
+
 compiler_moc_predefs_make_all: moc_predefs.h
 compiler_moc_predefs_clean:
 	-$(DEL_FILE) moc_predefs.h
@@ -383,9 +402,11 @@ compiler_moc_header_make_all: moc_mainWindow.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_mainWindow.cpp
 moc_mainWindow.cpp: gui/mainWindow.h \
+		src/networking/serial.h \
+		src/examples/examples.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include '/home/darkling/Desktop/AJ-Drone Software/moc_predefs.h' -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I'/home/darkling/Desktop/AJ-Drone Software' -I'/home/darkling/Desktop/AJ-Drone Software/gui' -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include gui/mainWindow.h -o moc_mainWindow.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include '/home/darkling/Desktop/AJ-Drone Software/moc_predefs.h' -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I'/home/darkling/Desktop/AJ-Drone Software' -I'/home/darkling/Desktop/AJ-Drone Software/gui' -I'/home/darkling/Desktop/AJ-Drone Software/src/examples' -I'/home/darkling/Desktop/AJ-Drone Software/src/networking' -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include gui/mainWindow.h -o moc_mainWindow.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -399,15 +420,28 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_header_clean 
 
 ####### Compile
 
-main.o: src/main.cpp gui/mainWindow.h
+main.o: src/main.cpp gui/mainWindow.h \
+		src/networking/serial.h \
+		src/examples/examples.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o src/main.cpp
 
-mainWindow.o: gui/mainWindow.cpp gui/mainWindow.h
+mainWindow.o: gui/mainWindow.cpp gui/mainWindow.h \
+		src/networking/serial.h \
+		src/examples/examples.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainWindow.o gui/mainWindow.cpp
+
+examples.o: src/examples/examples.cpp src/examples/examples.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o examples.o src/examples/examples.cpp
+
+serial.o: src/networking/serial.cpp src/networking/serial.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o serial.o src/networking/serial.cpp
+
+qrc_stylesheet.o: qrc_stylesheet.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_stylesheet.o qrc_stylesheet.cpp
 
 moc_mainWindow.o: moc_mainWindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainWindow.o moc_mainWindow.cpp

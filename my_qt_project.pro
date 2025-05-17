@@ -9,16 +9,23 @@ TEMPLATE = app
 
 # Add source files
 SOURCES += src/main.cpp \ 
-           gui/mainWindow.cpp
+           gui/mainWindow.cpp \
+ 	   src/examples/examples.cpp \
+	   src/networking/serial.cpp
 
 # Add header files
-HEADERS += gui/mainWindow.h
+HEADERS += gui/mainWindow.h \
+	   src/examples/examples.h \
+	   src/networking/serial.h
+
 
 # Add the Qtwidgets module for GUI-related features
 QT += widgets
 
 # Inlcude directories (if we have any custom includes)
-INCLUDEPATH += $$PWD/gui
+INCLUDEPATH += $$PWD/gui \
+	       $$PWD/src/examples \
+	       $$PWD/src/networking
 
 # If we need to link libraries or include other settings, add item here
 
@@ -28,7 +35,6 @@ INCLUDEPATH += $$PWD/gui
 
 # Install path (optional)
 
-
 # We can also add some resources files (e.g. .qrc) if required
-
+RESOURCES += gui/stylesheet.qrc
 

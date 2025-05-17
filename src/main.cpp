@@ -1,8 +1,8 @@
 #include <QApplication>
 #include "mainWindow.h"
 
-
 int main(int argc, char *argv[]){
+
    // Create a Qt application instance
    QApplication app(argc, argv);
 
@@ -14,8 +14,6 @@ int main(int argc, char *argv[]){
 
    // Execute the application (enter the event loop)
    return app.exec();
-
-   return 0;
 }
 
 

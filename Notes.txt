@@ -1,0 +1,3 @@
+February 27, 2025
+
+- ISSUE: when saving a file after being open it won't prompt a save file with a new name, since  it is not "save as"    - Alejandro
