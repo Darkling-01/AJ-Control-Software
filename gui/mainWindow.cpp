@@ -266,7 +266,7 @@ void MainWindow::saveAs()
 
 void onBlinkTriggered()
 {
-   if()
+// code here   
 }
 
 void servoMotorTriggered()
