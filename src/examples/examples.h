@@ -11,10 +11,6 @@ public:
    void servo_motor();
    void led_switch();
 
-<<<<<<< HEAD
-=======
-
->>>>>>> ed2465d (added more examples)
 };
 
 #endif

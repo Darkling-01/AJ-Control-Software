@@ -37,7 +37,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = my_qt_project1.0.0
-DISTDIR = /home/darkling/Desktop/AJ-Drone\ Software/.tmp/my_qt_project1.0.0
+DISTDIR = /home/darkling/Desktop/AJ-Control-Software/.tmp/my_qt_project1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1
 LIBS          = $(SUBLIBS) /usr/lib/x86_64-linux-gnu/libQt5Widgets.so /usr/lib/x86_64-linux-gnu/libQt5Gui.so /usr/lib/x86_64-linux-gnu/libQt5Core.so -lGL -lpthread   
@@ -406,7 +406,7 @@ moc_mainWindow.cpp: gui/mainWindow.h \
 		src/examples/examples.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include '/home/darkling/Desktop/AJ-Drone Software/moc_predefs.h' -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I'/home/darkling/Desktop/AJ-Drone Software' -I'/home/darkling/Desktop/AJ-Drone Software/gui' -I'/home/darkling/Desktop/AJ-Drone Software/src/examples' -I'/home/darkling/Desktop/AJ-Drone Software/src/networking' -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include gui/mainWindow.h -o moc_mainWindow.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/darkling/Desktop/AJ-Control-Software/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/darkling/Desktop/AJ-Control-Software -I/home/darkling/Desktop/AJ-Control-Software/gui -I/home/darkling/Desktop/AJ-Control-Software/src/examples -I/home/darkling/Desktop/AJ-Control-Software/src/networking -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include gui/mainWindow.h -o moc_mainWindow.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
