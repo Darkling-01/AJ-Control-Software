@@ -22,6 +22,10 @@ public:
    explicit MainWindow(QWidget *parent = nullptr);
    ~MainWindow(); 
 
+   void triggeredOnBlink();
+   void triggeredServoMotor();
+   void triggeredLedSwitch();
+
 protected:
 #ifndef QT_NO_CONTEXTMENU
    void contextMenuEvent(QContextMenuEvent *event) override;
@@ -85,35 +89,34 @@ private slots:
    void justify();
 
    // Examples
-   void onBlink()
-   {
-	Examples example;
-	example.led_Blink();
-   }
-
+   QString onBlink();
+   /*{
+      Examples example;
+      example.led_Blink();
+   }*/
    void servoMotor()
    {
-        Examples example;
-        example.servo_motor();
+      Examples example;
+      example.servo_motor();
    }
 
    void ledSwitch()
    {
-        Examples example;
-        example.led_switch();
+      Examples example;
+      example.led_switch();
    }
    
    // Communication
    void findDevice()
    {
-	Serial serial;
-	serial.findDevice();
+      Serial serial;
+      serial.findDevice();
    }
    
    void serialPort()
    {
-	Serial serial;
-	serial.serialPort();
+      Serial serial;
+      serial.serialPort();
    }
 
 };
