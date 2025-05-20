@@ -1,17 +1,27 @@
 #include "examples.h"
 #include <iostream>
+#include <QString>
+#include <QTextStream>
+#include <QFile>
 
-void Examples::led_Blink()
+QString Examples::led_Blink()
 {
-std::cout << "// Code goes here" << std::endl;
+   QFile file("src/examples/scripts/on_blink.txt");
+   if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+     {
+        return "Error: can't open file";
+     }
+
+   QTextStream in(&file);
+   return in.readAll();
 }
 
-void Examples::servo_motor()
+QString Examples::servo_motor()
 {
     // code here
 }
 
-void Examples::led_switch()
+QString Examples::led_switch()
 {
     // code here
 }

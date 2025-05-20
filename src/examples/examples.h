@@ -1,15 +1,15 @@
 #ifndef EXAMPLES_H
 #define EXAMPLES_H
 
+#include <QString>
 
 class Examples{
 
-
 public:
 
-   void led_Blink();
-   void servo_motor();
-   void led_switch();
+   QString led_Blink();
+   QString servo_motor();
+   QString led_switch();
 
 };
 

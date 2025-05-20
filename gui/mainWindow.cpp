@@ -213,33 +213,26 @@ void MainWindow::saveAs()
 
 
 // Examples Tab
-// used encapsulation technique .cpp and .h
-void MainWindow::triggeredOnBlink()
+void MainWindow::handleExamplesTriggered()
 {
-   QString blinkFile = onBlink();
 
-   QString filePath = QDir::homePath() + "/Desktop/Blink.cpp";
+   // use sender() to 
+    
+   Examples examples;
+   QString exampleCode = examples.led_Blink();
+
+   //if(exmapleName == "led_blink")
+
+   QString filePath = QDir::homePath() + "/Desktop/led_Blink.cpp";
    QFile file(filePath);
    if(file.open(QIODevice::WriteOnly | QIODevice::Text))
    {
       QTextStream stream(&file);
-      stream << blinkFile;
+      stream << exampleCode;
       file.close();
 
       openFileInTab(filePath);
    }
-}
-
-QString MainWindow::onBlink(){return "df";}
-
-void MainWindow::triggeredServoMotor()
-{
-   // Code here
-}
-
-void MainWindow::triggeredLedSwitch()
-{
-   // Code here
 }
 
 void MainWindow::leftAlign()
@@ -335,15 +328,15 @@ void MainWindow::createActions()
    // Example menu
    ledBlinkAct = new QAction(tr("Blink"), this);
    ledBlinkAct->setStatusTip("Blink");
-   connect(ledBlinkAct, &QAction::triggered, this, &MainWindow::triggeredOnBlink);
+   connect(ledBlinkAct, &QAction::triggered, this, &MainWindow::handleExamplesTriggered);
 
    servoMotorAct = new QAction(tr("Servo Motor"), this);
    servoMotorAct->setStatusTip("Servo Motor");
-   connect(servoMotorAct, &QAction::triggered, this, &MainWindow::triggeredServoMotor);
+   connect(servoMotorAct, &QAction::triggered, this, &MainWindow::handleExamplesTriggered);
 
    ledSwitchAct = new QAction(tr("Led Switch"), this);
    ledSwitchAct->setStatusTip("Led Switch");
-   connect(ledSwitchAct, &QAction::triggered, this, &MainWindow::triggeredLedSwitch);
+   connect(ledSwitchAct, &QAction::triggered, this, &MainWindow::handleExamplesTriggered);
 
    // Serial menu
    findDeviceAct = new QAction(tr("Find Device"), this);
