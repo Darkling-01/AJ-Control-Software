@@ -6,7 +6,7 @@
 
 QString Examples::led_Blink()
 {
-   QFile file("src/examples/scripts/on_blink.txt");
+   QFile file("src/examples/scripts/on_blink.cpp");
    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
      {
         return "Error: can't open file";
