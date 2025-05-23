@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
    : QMainWindow(parent)
 {
    // Set window title and size
-   setWindowTitle("AJ Control Software");
+   setWindowTitle("Micro Duck Software");
    setGeometry(100, 100, 1030, 690);  
 
    // Calling the file to add style (color)
@@ -354,7 +354,7 @@ void MainWindow::createActions()
 
    ledSwitchAct = new QAction(tr("Led Switch"), this);
    ledSwitchAct->setStatusTip("Led Switch");
-   ledSwitchAct->setData("led_swtich");
+   ledSwitchAct->setData("led_switch");
    connect(ledSwitchAct, &QAction::triggered, this, &MainWindow::handleExamplesTriggered);
 
    // Serial menu
@@ -363,6 +363,9 @@ void MainWindow::createActions()
 
    serialPortAct = new QAction(tr("Serial Port"), this);
    connect(serialPortAct, &QAction::triggered, this, &MainWindow::serialPort);
+
+   // Setting menu
+   
 }
 
 void MainWindow::createMenus()
@@ -386,4 +389,6 @@ void MainWindow::createMenus()
    examplesMenu->addAction(ledBlinkAct);
    examplesMenu->addAction(servoMotorAct);
    examplesMenu->addAction(ledSwitchAct);
+
+   settingsMenu = menuBar()->addMenu("&Settings");
 }

@@ -22,10 +22,6 @@ public:
    explicit MainWindow(QWidget *parent = nullptr);
    ~MainWindow(); 
 
-   void triggeredOnBlink();
-   void triggeredServoMotor();
-   void triggeredLedSwitch();
-
 protected:
 #ifndef QT_NO_CONTEXTMENU
    void contextMenuEvent(QContextMenuEvent *event) override;
@@ -88,23 +84,8 @@ private slots:
    void center();
    void justify();
 
-   // Examples
-   QString onBlink();
-   /*{
-      Examples example;
-      example.led_Blink();
-   }*/
-   void servoMotor()
-   {
-      Examples example;
-      example.servo_motor();
-   }
-
-   void ledSwitch()
-   {
-      Examples example;
-      example.led_switch();
-   }
+   // Handles examples
+   void handleExamplesTriggered();  // one slot for all menu actions
    
    // Communication
    void findDevice()

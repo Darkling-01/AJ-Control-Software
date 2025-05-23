@@ -18,10 +18,26 @@ QString Examples::led_Blink()
 
 QString Examples::servo_motor()
 {
-    // code here
+   QFile file("src/examples/scripts/servo_motor.cpp");
+   if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+     {
+        return "Error: can't open file";
+     }
+   QTextStream in(&file);
+   return in.readAll();
+
 }
 
 QString Examples::led_switch()
 {
-    // code here
+   QFile file("src/examples/scripts/led_switch.cpp");
+   if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+     {
+        return "Error: can't open file";
+     }
+
+   QTextStream in(&file);
+   return in.readAll();
 }
+
+
