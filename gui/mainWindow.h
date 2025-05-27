@@ -37,6 +37,7 @@ private:
  
    QString currentFile;      // Stores the file name or path of the saved file
    bool isFileSaved;	     // Tracks if the file has been saved before
+   bool isModified;          // Tracks if file has any changes
    
    QTabWidget *tabWidget;    // Declare QTabWidget as a variable memeber
    QTextEdit *textEdit;

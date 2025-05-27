@@ -150,7 +150,7 @@ void MainWindow::open()
      {
 	QTextStream in(&file);
 	QString fileContent = in.readAll();
-
+        isFileSaved = true;
 	openFileInTab(file.fileName());
  
 	file.seek(file.size());   // Move to the end of the file
@@ -167,7 +167,7 @@ void MainWindow::save()
 {
    // Get the active QTextEdit (the one the user is editing)
    QTextEdit *textEdit = getActiveTextEdit();  // You need a way to access the active QTextEdit
-
+   
    
    // If it's a new unsaved file, prompt user for a save location
    if(!isFileSaved)
@@ -183,6 +183,7 @@ void MainWindow::save()
 	     QFile file(currentFile);
 	     if(file.open(QIODevice::WriteOnly | QIODevice::Text))
 	       {
+                 // isModified = true;
 	          QTextStream out(&file);
 		  out << textEdit->toPlainText();   // Save the content of the editor
 		  file.close();
@@ -207,8 +208,26 @@ void MainWindow::save()
 }
 
 void MainWindow::saveAs()
-{
-   // Code here
+{  
+   QTextEdit *textEdit = getActiveTextEdit();
+
+   // open a dialog to new save location
+   QString filename = QFileDialog::getSaveFileName(this, tr("save as"), currentFile);
+   currentFile = filename;
+   
+   QFile file(currentFile);
+   if(file.open(QIODevice::WriteOnly | QIODevice::Text))
+      {
+         QTextStream out(&file);
+         out << textEdit -> toPlainText();
+         file.close();
+      }
+
+   else
+      {
+          QMessageBox::critical(nullptr, "Error", "Could not give new file name.");
+      }
+
 }
 
 
