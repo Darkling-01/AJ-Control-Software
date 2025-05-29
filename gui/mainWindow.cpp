@@ -67,6 +67,10 @@ void MainWindow::contextMenuEvent(QContextMenuEvent *event)
 
 void MainWindow::newFile()
 {
+   // Ask user to save changes
+   if(!maybeSave())
+      return;   // Cancel changes
+
    // use getSaveFileName(), if file does not exit, then a file will be created
    // opens the dialog and choose location
    QString filename = QFileDialog::getSaveFileName(this, tr("Save File"), 
@@ -78,12 +82,17 @@ void MainWindow::newFile()
 	QFile file(filename);
 	if(file.open(QIODevice::WriteOnly | QIODevice::Text))
 	  {
+
+            if(!maybeSave())
+              return;
+
 	    QTextStream stream(&file);
 	    stream << "// Your code goes here.\n";
             file.close();
-
-	    // Mark the file as saved and store the filename
+     
+	    // Reset modification flags and state
 	    currentFile = filename;
+            isModified = false;
 	    isFileSaved = true;
 	
 	    // Open the file in the editor  
@@ -151,7 +160,8 @@ void MainWindow::open()
 	QTextStream in(&file);
 	QString fileContent = in.readAll();
         isFileSaved = true;
-	openFileInTab(file.fileName());
+        // Navigate to file being opened
+	tabWidget->setCurrentWidget(openFileInTab(file.fileName()));
  
 	file.seek(file.size());   // Move to the end of the file
         
@@ -159,11 +169,11 @@ void MainWindow::open()
         QTextStream out(&file);
         // out << "\nNew content appended.";  // Example of what you want to append
 	file.close();
+        
      }
-
 }
 
-void MainWindow::save()
+bool MainWindow::save()
 {
    // Get the active QTextEdit (the one the user is editing)
    QTextEdit *textEdit = getActiveTextEdit();  // You need a way to access the active QTextEdit
@@ -183,7 +193,7 @@ void MainWindow::save()
 	     QFile file(currentFile);
 	     if(file.open(QIODevice::WriteOnly | QIODevice::Text))
 	       {
-                 // isModified = true;
+                 //isModified = true;
 	          QTextStream out(&file);
 		  out << textEdit->toPlainText();   // Save the content of the editor
 		  file.close();
@@ -268,6 +278,23 @@ void MainWindow::handleExamplesTriggered()
 
       openFileInTab(filePath);
    }
+}
+
+bool MainWindow::maybeSave()
+{
+   if(!isModified)
+      return true;
+ 
+   QMessageBox::StandardButton rec = QMessageBox::warning(this, "Unsaved Changes", 
+                             "The document has unsaved files.\nDo you want to save them?", 
+                              QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+
+   if(rec == QMessageBox::Save)
+      return MainWindow::save();   // Return the save result
+   else if(rec == QMessageBox::Cancel)
+      return true;    // Discard changes and proceed
+   else
+      return false;   // Cancel the action
 }
 
 void MainWindow::leftAlign()
