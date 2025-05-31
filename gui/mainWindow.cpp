@@ -68,8 +68,8 @@ void MainWindow::contextMenuEvent(QContextMenuEvent *event)
 void MainWindow::newFile()
 {
    // Ask user to save changes
-   if(!maybeSave())
-      return;   // Cancel changes
+  // if(!maybeSave())
+  //    return;   // Cancel changes
 
    // use getSaveFileName(), if file does not exit, then a file will be created
    // opens the dialog and choose location
@@ -83,8 +83,8 @@ void MainWindow::newFile()
 	if(file.open(QIODevice::WriteOnly | QIODevice::Text))
 	  {
 
-            if(!maybeSave())
-              return;
+    //        if(!maybeSave())
+    //          return;
 
 	    QTextStream stream(&file);
 	    stream << "// Your code goes here.\n";
@@ -147,11 +147,9 @@ void MainWindow::open()
 			tr("*.cpp *.c"));
    // Check is filename is empty (or canceled by user)
    if(filename.isEmpty())
-     {
-	return;	   // Do nothing if no file is selected
-     }
-
-    currentFile = filename;	// Save the file path for later 
+      return;	   // Do nothing if no file is selected
+   
+   currentFile = filename;	// Save the file path for later 
 
    // Create QFile instance
    QFile file(filename);
@@ -173,7 +171,7 @@ void MainWindow::open()
      }
 }
 
-bool MainWindow::save()
+void MainWindow::save()
 {
    // Get the active QTextEdit (the one the user is editing)
    QTextEdit *textEdit = getActiveTextEdit();  // You need a way to access the active QTextEdit
@@ -189,14 +187,13 @@ bool MainWindow::save()
 	  {
 	     currentFile = filename;    // Store the new filename
 	     isFileSaved = true;	// Mark the file saved
-
+             
 	     QFile file(currentFile);
 	     if(file.open(QIODevice::WriteOnly | QIODevice::Text))
 	       {
-                 //isModified = true;
 	          QTextStream out(&file);
 		  out << textEdit->toPlainText();   // Save the content of the editor
-		  file.close();
+		  file.close();  
 	       }
 	  }
     }
@@ -211,9 +208,10 @@ bool MainWindow::save()
          out << textEdit->toPlainText();    // Save the content to the editor
          file.close();
       }
-	else {
+      else 
+      {
             qDebug() << "Failed to open file for saving! Check permissions or file path.";
-        }
+      }
    }
 }
 
@@ -279,7 +277,28 @@ void MainWindow::handleExamplesTriggered()
       openFileInTab(filePath);
    }
 }
+/*
+void MainWindow::onTextChanges()
+{
+   if(isModified)
+   {
+      isModified = true;
+ //     MainWindow::updateTabTitle();
+   }
+}
+*/
+/*
+void MainWindow::updateTabTitle()
+{
+   int index = tabWidget->currentIndex();
+   if(index < 0) return;
 
+   QString baseName = QFileInfo(currentFile).fileName();
+   QString title = isModified ? "*" + baseName : baseName;
+   tabWidget->setTabText(index, title);
+}
+*/
+/*
 bool MainWindow::maybeSave()
 {
    if(!isModified)
@@ -296,7 +315,7 @@ bool MainWindow::maybeSave()
    else
       return false;   // Cancel the action
 }
-
+*/
 void MainWindow::leftAlign()
 {
    // code here

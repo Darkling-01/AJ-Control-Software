@@ -47,7 +47,11 @@ private:
 
    void createActions();
    void createMenus();
-   
+
+   bool maybeSave();
+//   void onTextChanges();
+//   void updateTabTitle();
+
    QMenu *fileMenu;
    QMenu *editMenu;
    QMenu *serialMenu;
@@ -77,10 +81,9 @@ private:
 private slots:
    void newFile();
    void open();
-   bool save();
+   void save();
    void saveAs();
    // void print();
-   bool maybeSave();
    void leftAlign();
    void rightAlign();
    void center();
